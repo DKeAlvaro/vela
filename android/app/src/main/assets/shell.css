@@ -1,0 +1,22 @@
+@font-face { font-family: 'Atkinson'; src: url('fonts/atkinson-hyperlegible-next-normal.woff2') format('woff2'); font-weight: 200 800; }
+@font-face { font-family: 'Fraunces'; src: url('fonts/fraunces-normal.woff2') format('woff2'); font-weight: 100 900; }
+:root { --night:#13110F; --cream:#F4EFE6; --amber:#F0A23A; --ash:#8A8175; --hair:#2B2723; --sage:#7F9C80; --signal:#D2513A; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--night); color: var(--cream); font: 400 20px/1.4 'Atkinson', system-ui, sans-serif; }
+main { padding: 32px 24px 48px; max-width: 560px; }
+.mark { font: 500 40px/1 'Fraunces', serif; letter-spacing: -0.01em; }
+.mark i { display: inline-block; width: .28em; height: .28em; border-radius: 50%; background: var(--amber); margin-left: .08em; }
+h1 { font: 500 34px/1.15 'Fraunces', serif; margin: 40px 0 12px; letter-spacing: -0.01em; }
+p { margin: 0 0 16px; }
+.ash { color: var(--ash); }
+.label { font-size: 16px; letter-spacing: .08em; text-transform: uppercase; color: var(--ash); margin: 28px 0 8px; }
+button { display: block; width: 100%; min-height: 64px; margin: 10px 0; padding: 0 20px; border: 2px solid var(--hair);
+  border-radius: 20px; background: transparent; color: var(--cream); font: 600 22px 'Atkinson', sans-serif; text-align: left; }
+button.primary { background: var(--cream); color: var(--night); border-color: var(--cream); }
+button:active { opacity: .7; }
+.row { display: flex; gap: 10px; } .row button { flex: 1; text-align: center; }
+.status { font-size: 26px; font-weight: 600; margin: 8px 0; }
+.ok { color: var(--sage); } .bad { color: var(--signal); }
+pre { font-size: 14px; white-space: pre-wrap; word-break: break-word; border-top: 1px solid var(--hair); padding-top: 12px; color: var(--ash); }
+img.frame { width: 100%; border: 1px solid var(--hair); margin-top: 12px; display: none; }
+a { color: var(--cream); }

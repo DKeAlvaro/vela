@@ -1,0 +1,7 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+  <shortcut android:shortcutId="diag" android:enabled="true"
+      android:shortcutShortLabel="@string/shortcut_diag">
+    <intent android:action="android.intent.action.VIEW" android:data="velashell://diag"
+        android:targetPackage="app.vela.shell" android:targetClass="app.vela.shell.MainActivity" />
+  </shortcut>
+</shortcuts>

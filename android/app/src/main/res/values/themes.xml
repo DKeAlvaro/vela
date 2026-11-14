@@ -1,0 +1,13 @@
+<resources>
+  <color name="night">#13110F</color>
+  <color name="cream">#F4EFE6</color>
+  <color name="amber">#F0A23A</color>
+  <style name="Theme.Vela" parent="Theme.AppCompat.NoActionBar">
+    <item name="android:windowBackground">@color/night</item>
+    <item name="android:statusBarColor">@color/night</item>
+    <item name="android:navigationBarColor">@color/night</item>
+    <item name="android:windowLightStatusBar">false</item>
+    <item name="colorPrimary">@color/cream</item>
+    <item name="colorAccent">@color/amber</item>
+  </style>
+</resources>

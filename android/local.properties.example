@@ -1,0 +1,8 @@
+# Copy to local.properties (gitignored) next to this file.
+# Android SDK location, if Android Studio did not write it for you:
+sdk.dir=/path/to/Android/Sdk
+# The Vela web app the shell opens, with your app token. `&device=glasses` is appended at runtime.
+vela.url=https://your-vela-host.example/?k=YOUR_APP_TOKEN
+# Optional: leave out for Developer Mode. Only needed for a Meta release channel.
+#mwdat_application_id=
+#mwdat_client_token=

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#13110F">
+  <meta name="description" content="Vela keeps watch. Quiet until it matters.">
+  <title>Vela</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <link rel="preload" href="/fonts/fraunces-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/atkinson-hyperlegible-next-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <!-- MAIN: for the wearer. Minimal: Vela speaks; every wearer action also works by voice. -->
+  <main id="view-main" class="view main">
+    <header class="top">
+      <h1 class="mark" id="mark">vela<span class="flame" aria-hidden="true"></span></h1>
+      <a href="#/family" class="navlink" id="family-link">For family</a>
+    </header>
+    <div class="firefly" id="main-firefly" aria-hidden="true"></div>
+    <p class="status-line" id="status" aria-live="polite">Paused</p>
+    <p class="main-line" id="main-line" aria-live="assertive"></p>
+    <p class="status-note" id="status-note"></p>
+    <button class="btn btn-ink btn-start" id="start">Start</button>
+  </main>
+
+  <!-- SETTINGS -->
+  <main id="view-settings" class="view" hidden>
+    <header class="top">
+      <a href="#/family" class="navlink back">Back</a>
+      <h2 class="view-title">Settings</h2>
+    </header>
+    <form id="settings-form" class="settings" autocomplete="off"></form>
+  </main>
+
+  <!-- FAMILY -->
+  <main id="view-family" class="view" hidden>
+    <header class="top">
+      <a href="#/" class="navlink back">Back</a>
+      <a href="#/settings" class="navlink">Settings</a>
+    </header>
+    <div id="family"></div>
+  </main>
+
+  <!-- PART A: setup on the phone screen. First: who is Vela for? -->
+  <main id="view-setup" class="view setup" hidden>
+    <header class="top"><h1 class="mark">vela<span class="flame" aria-hidden="true"></span></h1><span class="step" id="setup-step"></span></header>
+    <section class="setup-pane" data-step="glasses">
+      <h2 class="setup-head" id="glasses-head">Your glasses</h2>
+      <button class="btn btn-ink btn-big" id="glasses-action" hidden></button>
+      <button class="btn btn-line btn-big" id="glasses-phone">Use the phone camera for now</button>
+    </section>
+  </main>
+
+  <!-- PART B: Vela's first conversation, by voice. The screen is only a companion. -->
+  <main id="view-talk" class="view talk" hidden>
+    <div class="firefly talk-firefly" id="talk-firefly" aria-hidden="true"></div>
+    <p class="talk-state" id="talk-state" aria-live="polite"></p>
+    <div class="meter" id="talk-meter" hidden><span id="talk-meter-bar"></span></div>
+    <p class="talk-line" id="talk-line" aria-live="assertive"></p>
+    <p class="talk-heard" id="talk-heard"></p>
+    <div class="talk-buttons" id="talk-buttons"></div>
+  </main>
+
+  <!-- DEBUG (long-press the wordmark) -->
+  <aside id="debug" class="debug" hidden aria-label="Debug panel"></aside>
+
+  <video id="preview" class="preview" muted playsinline hidden></video>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>

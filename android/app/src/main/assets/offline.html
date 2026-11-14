@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vela</title><link rel="stylesheet" href="shell.css"></head>
+<body><main>
+  <div class="mark">vela<i></i></div>
+  <h1 id="title">Vela can't reach the internet.</h1>
+  <p id="body">She will carry on by herself as soon as the connection is back.</p>
+  <button class="primary" id="retry">Try again</button>
+  <p class="ash" id="detail"></p>
+  <p style="margin-top:48px"><a href="diag.html">Glasses check</a></p>
+</main>
+<script>
+  var q = new URLSearchParams(location.search);
+  var target = q.get('target');
+  if (q.get('reason') === 'server') {
+    document.getElementById('title').textContent = 'Vela is having a rest.';
+    document.getElementById('body').textContent = 'The Vela service did not answer. Trying again shortly.';
+  }
+  function retry() { if (target && /^https:\/\//.test(target)) location.replace(target); else history.back(); }
+  document.getElementById('retry').onclick = retry;
+  // Quiet automatic retry with back-off: 10 s, 20 s, 40 s… up to 2 min.
+  var wait = 10000;
+  (function loop() { setTimeout(function () { if (navigator.onLine) retry(); wait = Math.min(wait * 2, 120000); loop(); }, wait); })();
+  window.addEventListener('online', retry);
+</script>
+</body></html>

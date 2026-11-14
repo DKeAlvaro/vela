@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vela · glasses check</title><link rel="stylesheet" href="shell.css"></head>
+<body><main>
+  <div class="mark">vela<i></i></div>
+  <h1>Glasses check</h1>
+  <p class="ash">Tests the link to the glasses without the rest of Vela. Nothing here is sent anywhere.</p>
+  <div class="status" id="status">Starting…</div>
+  <div class="ash" id="sub"></div>
+
+  <div class="label">Glasses</div>
+  <button class="primary" id="connect">Connect</button>
+  <button id="register">Connect Vela in the Meta AI app</button>
+  <div class="status" id="regmsg" style="display:none"></div>
+  <div class="row"><button data-meta="app">Open Meta AI</button><button data-meta="settings">Meta AI app settings</button></div>
+  <button data-meta="store">Meta AI in the Play Store</button>
+  <button id="shot">Take one photo</button>
+  <button id="burst">Take ten photos (timing)</button>
+  <img class="frame" id="img" alt="Last photo">
+  <div class="label">Session log (newest first)</div>
+  <pre id="slog"></pre>
+
+  <div class="label">Camera</div>
+  <div class="row"><button data-src="auto">Auto</button><button data-src="glasses">Glasses</button><button data-src="phone">Phone</button></div>
+  <div class="row"><button data-mode="live">Live</button><button data-mode="photo">Photo</button><button data-mode="stream">Stream</button></div>
+
+  <div class="label">Test glasses (Meta Mock Device Kit)</div>
+  <button id="mock">Use test glasses</button>
+  <div class="row"><button id="moff">Switch off</button><button id="mon">Switch on</button></div>
+  <button id="mockoff">Stop test glasses</button>
+
+  <div class="label">Sound</div>
+  <button id="route">Where does sound go?</button>
+  <div class="row"><button data-mic="glasses">Mic: glasses</button><button data-mic="phone">Mic: phone</button></div>
+
+  <p style="margin-top:32px"><a href="#" id="open">Open Vela</a></p>
+  <pre id="log"></pre>
+</main>
+<script>
+  var N = window.VelaNative;
+  var $ = function (id) { return document.getElementById(id); };
+  function log(x) { $('log').textContent = (typeof x === 'string' ? x : JSON.stringify(x, null, 1)) + '\n\n' + $('log').textContent.slice(0, 4000); }
+  if (!N) { $('status').textContent = 'No bridge: open this inside the Vela app.'; $('status').className = 'status bad'; }
+  var words = { idle: 'Not started', connecting: 'Connecting…', ready: 'Ready', disconnected: 'Not connected', error: 'Problem' };
+  function show(state, s) {
+    s = s || {};
+    var src = s.source ? ' · ' + s.source + ' camera' : '';
+    $('status').textContent = (words[state] || state) + src;
+    $('status').className = 'status ' + (state === 'ready' ? 'ok' : (state === 'error' ? 'bad' : ''));
+    var g = s.glasses || {};
+    $('sub').textContent = [s.message, g.device && ('Glasses: ' + g.device + (g.battery != null ? ', ' + g.battery + '%' : '') + (g.worn === false ? ', not worn' : '')),
+      'Meta AI link: ' + (g.registration || '?'), 'Session: ' + (g.session || '?'),
+      g.hinge && ('Hinge: ' + g.hinge), g.thermal && g.thermal !== 'none' && ('Heat: ' + g.thermal),
+      'Mode: ' + (g.captureMode || '?') + (g.mock ? ' (test glasses)' : '')].filter(Boolean).join(' · ');
+    $('slog').textContent = (g.sessionLog || []).slice().reverse().join('\n');
+  }
+  function run(p) { return p.then(function (r) { log(r); return r; }, function (e) { log('Error ' + (e.code || '') + ': ' + e.message); }); }
+  if (N) {
+    N.onState(show);
+    N.refresh().then(function (s) { show(s.state, s); });
+    $('connect').onclick = function () { run(N.connect()); };
+    $('register').onclick = function () {
+      var m = $('regmsg'); m.style.display = 'block'; m.className = 'status'; m.textContent = 'Asking Meta AI…';
+      run(N.registerGlasses().then(function (s) {
+        var r = (s && s.register) || {}, meta = r.metaAi;
+        m.className = 'status ' + (r.result === 'ok' ? 'ok' : 'bad');
+        m.textContent = (r.message || 'No answer.') + (meta ? ' (Meta AI ' + (meta.versionName || '?') + ')' : '');
+        return r;
+      }, function (e) { m.className = 'status bad'; m.textContent = 'Error ' + (e.code || '') + ': ' + e.message; throw e; }));
+    };
+    document.querySelectorAll('[data-meta]').forEach(function (b) { b.onclick = function () { run(N.openMetaAi(b.dataset.meta)); }; });
+    $('shot').onclick = function () {
+      run(N.captureFrame().then(function (f) {
+        $('img').src = 'data:image/jpeg;base64,' + f.jpeg; $('img').style.display = 'block';
+        var m = Object.assign({}, f); delete m.jpeg; return m;
+      }));
+    };
+    $('burst').onclick = async function () {
+      var times = [], fails = 0, src = {};
+      for (var i = 0; i < 10; i++) {
+        var t0 = performance.now();
+        try { var f = await N.captureFrame(); times.push(Math.round(performance.now() - t0)); src[f.source] = (src[f.source] || 0) + 1;
+          $('img').src = 'data:image/jpeg;base64,' + f.jpeg; $('img').style.display = 'block'; }
+        catch (e) { fails++; }
+        await new Promise(function (r) { setTimeout(r, 500); });
+      }
+      times.sort(function (a, b) { return a - b; });
+      log({ photos: times.length, failed: fails, sources: src, ms_median: times[Math.floor(times.length / 2)], ms_min: times[0], ms_max: times[times.length - 1], all_ms: times });
+    };
+    document.querySelectorAll('[data-src]').forEach(function (b) { b.onclick = function () { run(N.setSource(b.dataset.src)); }; });
+    document.querySelectorAll('[data-mode]').forEach(function (b) { b.onclick = function () { run(N.setCaptureMode(b.dataset.mode)); }; });
+    document.querySelectorAll('[data-mic]').forEach(function (b) { b.onclick = function () { run(N.setMicRoute(b.dataset.mic)); }; });
+    $('mock').onclick = function () { run(N.useMock({ enabled: true })); };
+    $('mockoff').onclick = function () { run(N.useMock({ enabled: false })); };
+    $('moff').onclick = function () { run(N.useMock({ enabled: true, power: false })); };
+    $('mon').onclick = function () { run(N.useMock({ enabled: true, power: true })); };
+    $('route').onclick = function () { run(N.audioRoute()); };
+  }
+  $('open').onclick = function (e) { e.preventDefault(); location.href = 'velashell://reload'; };
+</script>
+</body></html>

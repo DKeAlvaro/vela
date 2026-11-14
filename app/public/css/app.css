@@ -1,0 +1,175 @@
+@font-face { font-family: "Fraunces"; src: url("/fonts/fraunces-normal.woff2") format("woff2"); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: "Atkinson Hyperlegible Next"; src: url("/fonts/atkinson-hyperlegible-next-normal.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
+
+:root {
+  /* STYLE.md: Night is the primary surface, Cream text, one Amber firefly. */
+  --night: #13110F; --cream: #F4EFE6; --ink: #1F1B16; --amber: #F0A23A; --ash: #8C8378;
+  --hair: #2B2723; --sage: #7F9C80; --signal: #D2513A; --well: #1B1815;
+  --ease: cubic-bezier(.2,.8,.2,1);
+  --r: 20px;
+  --pad: 24px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--night); color: var(--cream); }
+body {
+  font-family: "Atkinson Hyperlegible Next", system-ui, sans-serif;
+  font-size: 20px; line-height: 1.4;
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+}
+[hidden] { display: none !important; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+
+.view { max-width: 560px; margin: 0 auto; padding: calc(env(safe-area-inset-top) + 12px) var(--pad) calc(env(safe-area-inset-bottom) + 40px); animation: rise .25s var(--ease) both; }
+@keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* header + wordmark */
+.top { display: flex; align-items: center; justify-content: space-between; min-height: 72px; gap: 12px; }
+.mark { font-family: "Fraunces", serif; font-weight: 500; font-size: 40px; letter-spacing: -0.01em; margin: 0; line-height: 1; font-variation-settings: "opsz" 72; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+.flame { display: inline-block; width: 0.28em; height: 0.28em; border-radius: 50%; background: var(--amber); margin-left: 0.08em; vertical-align: 0.02em; box-shadow: 0 0 0 0 rgba(240,162,58,0); transition: box-shadow .9s var(--ease); }
+/* The firefly glows while Vela speaks (soft radial amber, max 15% opacity). */
+body.speaking .flame { box-shadow: 0 0 22px 14px rgba(240,162,58,.15); animation: glow 2.4s var(--ease) infinite; }
+@keyframes glow { 50% { box-shadow: 0 0 16px 9px rgba(240,162,58,.09); } }
+.topnav { display: flex; gap: 4px; }
+.navlink { display: inline-flex; align-items: center; min-height: 64px; padding: 0 12px; font-size: 20px; font-weight: 600; text-decoration: none; color: var(--cream); }
+.navlink.back::before { content: "←"; margin-right: 8px; font-weight: 400; }
+.view-title { font-family: "Fraunces", serif; font-weight: 500; font-size: 32px; margin: 0; }
+
+/* status */
+.status { margin: 20px 0 8px; }
+.status-line { font-size: 28px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 12px; }
+.status-line::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--ash); flex: none; transition: background .6s var(--ease); }
+.status-line[data-s="watching"]::before { background: var(--sage); }
+.status-line[data-s="nocamera"]::before, .status-line[data-s="error"]::before { background: var(--cream); }
+.status-line[data-s="offline"]::before { background: transparent; border: 2px solid var(--ash); }
+.status-note { margin: 4px 0 0; color: var(--ash); font-size: 20px; min-height: 28px; }
+
+/* caption: what Vela said */
+.caption { margin: 24px 0 8px; padding: 24px 0 8px; border-top: 1px solid var(--hair); animation: rise .7s var(--ease) both; }
+.caption-meta { margin: 0 0 8px; font-size: 18px; color: var(--ash); letter-spacing: .02em; }
+.caption-line { margin: 0; font-family: "Fraunces", serif; font-weight: 400; font-size: 34px; line-height: 1.18; letter-spacing: -0.01em; font-variation-settings: "opsz" 48; }
+.ask { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 24px; }
+
+/* buttons */
+.btn { display: flex; align-items: center; justify-content: center; min-height: 72px; padding: 0 24px; border-radius: var(--r); border: 2px solid var(--cream); font-size: 24px; font-weight: 700; text-decoration: none; cursor: pointer; background: transparent; touch-action: manipulation; transition: background .4s var(--ease), color .4s var(--ease); }
+.btn:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
+.btn-ink { background: var(--cream); color: var(--night); }
+.btn-line { background: transparent; color: var(--cream); }
+.btn-start { width: 100%; min-height: 96px; font-size: 30px; margin: 40px 0 28px; }
+.btn-start.on { background: transparent; color: var(--cream); }
+.btn-call { width: 100%; min-height: 112px; font-size: 34px; margin-top: 24px; }
+.btn-small { min-height: 64px; font-size: 20px; padding: 0 18px; }
+
+/* recording */
+.recording { margin: 20px 0 0; padding: 24px; border-radius: var(--r); background: var(--signal); color: var(--cream); }
+.rec-line { margin: 0; font-size: 26px; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+.rec-dot { width: 16px; height: 16px; border-radius: 50%; background: var(--cream); animation: breathe 2s var(--ease) infinite; }
+@keyframes breathe { 50% { opacity: .35; } }
+.rec-note { margin: 6px 0 16px; font-size: 20px; opacity: .9; }
+.btn-rec { width: 100%; border-color: var(--cream); color: var(--signal); background: var(--cream); }
+
+/* watches */
+.watch-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.watch { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 80px; padding: 16px 18px 16px 20px; border: 1px solid var(--hair); border-radius: var(--r); cursor: pointer; transition: border-color .4s var(--ease); }
+.watch[aria-checked="true"] { border-color: var(--ash); }
+.watch-text { flex: 1; min-width: 0; }
+.watch-label { display: block; font-size: 24px; font-weight: 700; line-height: 1.2; }
+.watch-desc { display: block; font-size: 18px; color: var(--ash); margin-top: 2px; line-height: 1.3; }
+.switch { flex: none; width: 64px; height: 40px; border-radius: 20px; border: 2px solid var(--ash); position: relative; transition: background .4s var(--ease); }
+.switch::after { content: ""; position: absolute; top: 4px; left: 4px; width: 28px; height: 28px; border-radius: 50%; background: var(--ash); transition: transform .5s var(--ease), background .4s var(--ease); }
+.watch[aria-checked="true"] .switch { background: var(--cream); border-color: var(--cream); }
+.watch[aria-checked="true"] .switch::after { transform: translateX(24px); background: var(--night); }
+.watch:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
+
+.fineprint { color: var(--ash); font-size: 18px; margin: 28px 0 0; }
+
+/* settings */
+.lede { color: var(--ash); margin: 4px 0 20px; }
+.settings fieldset { border: 0; border-top: 1px solid var(--hair); margin: 0; padding: 20px 0 24px; }
+.settings legend { font-family: "Fraunces", serif; font-size: 26px; font-weight: 500; padding: 0; margin-bottom: 4px; float: left; width: 100%; }
+.settings legend + * { clear: both; }
+.settings .hint { color: var(--ash); font-size: 18px; margin: 0 0 12px; clear: both; }
+.field { display: block; margin: 12px 0; }
+.field > span { display: block; font-size: 18px; color: var(--ash); margin-bottom: 4px; }
+.field input, .field select { width: 100%; min-height: 60px; padding: 0 16px; border: 1px solid var(--hair); border-radius: 14px; background: var(--well); color: var(--cream); font-size: 20px; color-scheme: dark; }
+.field input:focus, .field select:focus { outline: 2px solid var(--cream); border-color: var(--cream); }
+.row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.item { border: 1px solid var(--hair); border-radius: var(--r); padding: 4px 16px 12px; margin: 12px 0; }
+.item-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 56px; }
+.item-head strong { font-size: 22px; }
+.linkbtn { background: none; border: 0; min-height: 56px; padding: 0 8px; font-size: 18px; text-decoration: underline; color: var(--ash); cursor: pointer; }
+.check { display: flex; gap: 14px; align-items: flex-start; margin: 12px 0; font-size: 19px; cursor: pointer; }
+.check input { width: 32px; height: 32px; margin: 2px 0 0; flex: none; accent-color: var(--cream); }
+.face-row { display: flex; align-items: center; gap: 14px; }
+.face-thumb { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; background: var(--hair); flex: none; }
+.ok { color: var(--sage); font-weight: 700; }
+.warn { color: var(--cream); font-weight: 700; }
+
+/* family: one screen, vision doc §8 */
+.fam-day { color: var(--ash); font-size: 18px; margin: 24px 0 8px; letter-spacing: .02em; }
+.fam-head { font-family: "Fraunces", serif; font-weight: 500; font-size: 48px; line-height: 1.05; margin: 0 0 12px; letter-spacing: -0.01em; font-variation-settings: "opsz" 72; }
+.fam-head .fine { color: var(--sage); }
+.fam-sub { color: var(--ash); margin: 0 0 28px; font-size: 20px; }
+.fam-moments { border-top: 1px solid var(--hair); }
+.moment { display: grid; grid-template-columns: 64px 1fr; gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--hair); }
+.moment time { color: var(--ash); font-size: 18px; padding-top: 3px; font-variant-numeric: tabular-nums; }
+.moment .w { display: block; font-size: 16px; color: var(--ash); letter-spacing: .08em; text-transform: uppercase; margin-bottom: 4px; }
+.moment .l { font-family: "Fraunces", serif; font-size: 24px; line-height: 1.25; }
+.note { padding: 8px 0 0; font-size: 19px; }
+.note p { margin: 6px 0; }
+.note .note-h { color: var(--ash); font-size: 16px; letter-spacing: .08em; text-transform: uppercase; margin-top: 14px; }
+.note ul { margin: 4px 0; padding-left: 22px; }
+.empty { color: var(--ash); }
+
+/* part A: helper setup */
+.label { font-size: 16px; color: var(--ash); letter-spacing: .08em; text-transform: uppercase; margin: 0; }
+.setup .top .label { text-transform: none; letter-spacing: 0; font-size: 18px; }
+.setup-pane { margin-top: 48px; animation: rise .25s var(--ease) both; }
+.step { color: var(--ash); font-size: 18px; font-variant-numeric: tabular-nums; }
+.setup-head { font-family: "Fraunces", serif; font-weight: 500; font-size: 40px; line-height: 1.1; letter-spacing: -0.01em; margin: 14px 0 18px; font-variation-settings: "opsz" 72; }
+.setup-body { font-size: 21px; color: var(--cream); opacity: .86; margin: 0 0 32px; }
+.setup-note { color: var(--ash); font-size: 18px; margin: 14px 0; min-height: 4px; }
+.btn-big { width: 100%; min-height: 88px; font-size: 26px; margin-top: 14px; }
+
+.watch-cards { list-style: none; margin: 8px 0 8px; padding: 0; display: grid; gap: 18px; }
+.watch-cards li { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; }
+.watch-cards img { width: 120px; height: 68px; object-fit: cover; border-radius: 10px; display: block; }
+.watch-cards p { margin: 0; font-size: 20px; line-height: 1.3; }
+.setup .field input { font-size: 22px; }
+
+/* part B: the conversation */
+.talk { display: flex; flex-direction: column; min-height: 100vh; padding-top: calc(env(safe-area-inset-top) + 28px); }
+.firefly.talk-firefly { width: 88px; height: 88px; margin: 9vh 0 28px; opacity: .6; }
+.talk .talk-state { font-size: 26px; font-weight: 700; color: var(--cream); margin: 0 0 14px; min-height: 34px; }
+.talk .talk-line { font-family: "Fraunces", serif; font-size: 32px; line-height: 1.22; margin: 0 0 22px; min-height: 2.5em; letter-spacing: -0.01em; }
+.talk .talk-heard { font-size: 22px; color: var(--ash); margin: 0; min-height: 30px; }
+.talk .talk-heard b { color: var(--cream); font-weight: 600; }
+.meter { height: 10px; border-radius: 5px; background: var(--hair); overflow: hidden; margin: 0 0 22px; max-width: 320px; }
+.meter span { display: block; height: 100%; width: 0; background: var(--amber); border-radius: 5px; transition: width .08s linear; }
+.main .firefly { width: 120px; height: 120px; margin: 64px 0 36px; }
+.firefly { width: 96px; height: 96px; border-radius: 50%; background: var(--amber); margin: 56px 0 40px; box-shadow: 0 0 0 0 rgba(240,162,58,0); transition: box-shadow .4s var(--ease), transform .4s var(--ease), opacity .4s var(--ease); opacity: .5; transform: scale(.82); }
+.firefly.on { opacity: .7; transform: scale(.9); }
+body.speaking .main .firefly, .firefly.speaking { opacity: 1; transform: scale(1); box-shadow: 0 0 60px 34px rgba(240,162,58,.15); animation: glow 2.4s var(--ease) infinite; }
+.firefly.listening { opacity: .9; transform: scale(.92); animation: listen 2.2s var(--ease) infinite; }
+@keyframes listen { 50% { box-shadow: 0 0 0 14px rgba(240,162,58,.10); } }
+.talk-line { font-family: "Fraunces", serif; font-size: 34px; line-height: 1.2; margin: 0 0 18px; min-height: 2.4em; letter-spacing: -0.01em; }
+.talk-state { color: var(--ash); font-size: 20px; margin: 0; min-height: 28px; }
+.talk-heard { color: var(--ash); font-size: 20px; margin: 8px 0 0; min-height: 28px; font-style: normal; }
+.talk-buttons { display: flex; gap: 12px; margin-top: auto; padding-bottom: 24px; }
+.talk-buttons .btn { flex: 1; min-height: 72px; font-size: 22px; }
+
+/* debug */
+.debug { position: fixed; inset: auto 0 0 0; max-height: 82vh; overflow: auto; background: var(--well); border-top: 1px solid var(--hair); color: var(--cream); padding: 16px 18px calc(env(safe-area-inset-bottom) + 18px); font-size: 15px; line-height: 1.35; z-index: 10; border-radius: 20px 20px 0 0; }
+.debug h4 { margin: 12px 0 6px; font-size: 14px; color: var(--ash); letter-spacing: .08em; text-transform: uppercase; }
+.debug .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 10px; }
+.debug .grid b { display: block; font-size: 20px; color: var(--cream); }
+.debug .grid span { color: var(--ash); font-size: 13px; }
+.debug button, .debug .dbtn { background: transparent; border: 1px solid var(--hair); color: var(--cream); border-radius: 12px; min-height: 48px; padding: 0 12px; font-size: 15px; cursor: pointer; }
+.debug .bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; }
+.debug input[type=text], .debug textarea { width: 100%; background: var(--night); color: var(--cream); border: 1px solid var(--hair); border-radius: 10px; padding: 10px; font-size: 15px; }
+.debug pre { white-space: pre-wrap; word-break: break-word; font: 12px/1.35 ui-monospace, monospace; color: #cfc8bc; margin: 0; max-height: 220px; overflow: auto; }
+.preview { position: fixed; right: 12px; top: 84px; width: 96px; height: 128px; object-fit: cover; border-radius: 12px; border: 1px solid var(--hair); z-index: 5; background: var(--well); }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+.main-line { font-family: "Fraunces", serif; font-size: 30px; line-height: 1.2; margin: 18px 0 0; min-height: 1.2em; }

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vela: sources</title>
+<meta name="description" content="Where every number and claim on the Vela page comes from.">
+<meta name="theme-color" content="#13110F">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2313110F'/%3E%3Ccircle cx='32' cy='32' r='11' fill='%23F0A23A'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+<style>
+.src{padding:var(--s5) 0 var(--sec)}
+.src h1{font-size:clamp(40px,5vw,64px)}
+.src .intro{margin-top:var(--s3);max-width:52ch;color:var(--body)}
+.src dl{margin:var(--s5) 0 0;display:grid;gap:0;max-width:820px}
+.src dl>div{padding:var(--s3) 0;border-top:1px solid var(--hair)}
+.src dt{font:500 clamp(22px,1.1rem + .6vw,28px)/1.25 var(--display);color:var(--cream)}
+.src dd{margin:var(--s1) 0 0;color:var(--body);max-width:62ch}
+.src h2{font-size:clamp(28px,3vw,40px);margin-top:var(--s5)}
+.src .notes{margin-top:var(--s3);max-width:62ch;color:var(--body)}
+.src .notes p+p{margin-top:var(--s2)}
+.back{display:inline-flex;align-items:center;min-height:44px;color:var(--cream);text-underline-offset:4px}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="mark" href="./" aria-label="Vela, home">vela<i aria-hidden="true"></i></a>
+  <nav class="nav" aria-label="Main"><a class="nav-cta" href="./#try">Try it</a></nav>
+</header>
+<main class="src">
+  <div class="wrap">
+    <a class="back" href="./">Back to Vela</a>
+    <h1>Sources</h1>
+    <p class="intro">Every number and claim on the Vela page, and where it comes from. Vela is a prototype; where a claim rests on our own test, we say so.</p>
+    <dl>
+      <div><dt>40.2% of women over 65 in the EU live alone, and 21.8% of men</dt>
+        <dd>Eurostat, EU-27, 2018. Quoted in the Vela product notes.</dd></div>
+      <div><dt>0 of 156 stranger pairs matched</dt>
+        <dd>Vela evaluation, &ldquo;eval&rdquo; folder of the repository. Offline test of the app&rsquo;s face model (Human 3.3.6): 5 people with 3 photos each, 2 photos to enrol, against 4 strangers; 156 stranger pairs, 0 false matches at threshold 0.50.</dd></div>
+      <div><dt>4 in 5 photos of known people were recognised</dt>
+        <dd>Same test: 80% true match over 15 photo pairs (not people), threshold 0.50. The app ships at 0.52; at 0.525 the result is the same (80% true, 0% false). A small sample.</dd></div>
+      <div><dt>Faces are matched on the phone; your voice is processed on a server</dt>
+        <dd>Vela app source: face detection and matching run on the device, saved faces stay in the phone&rsquo;s storage, and the server has no face handling. Photos from the glasses never leave the device; only spoken words go to the server.</dd></div>
+      <div><dt>A face is saved only when you introduce the person</dt>
+        <dd>Vela app source: a face is enrolled only after the wearer says who the person is and confirms it.</dd></div>
+      <div><dt>&euro;9 a month, glasses bought once at the optician</dt>
+        <dd>Planned price, set in November 2026. Not on sale yet.</dd></div>
+    </dl>
+    <h2>Images</h2>
+    <div class="notes">
+      <p>The two app screens under &ldquo;How it works&rdquo; are real captures of the running prototype, cropped.</p>
+      <p>The photographs of Carmen, Marta, Pedro and the stranger are illustrations made for this page, not customers.</p>
+    </div>
+  </div>
+</main>
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span class="mark">vela<i aria-hidden="true"></i></span>
+    <nav class="foot-nav" aria-label="Footer"><a href="./">Home</a><a href="./#privacy">Privacy</a></nav>
+    <p>For Meta Ray-Ban glasses. Not a medical device.</p>
+  </div>
+</footer>
+</body>
+</html>

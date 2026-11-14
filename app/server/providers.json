@@ -1,0 +1,1 @@
+{ "allow_openai": false, "openai_key_var": "OPENAI_API_KEY", "note": "OpenAI Whisper is a fallback and is off by default. Set allow_openai to true to enable it. Re-read every minute." }

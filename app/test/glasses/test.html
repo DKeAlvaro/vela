@@ -1,0 +1,45 @@
+<!doctype html><meta charset=utf-8><script src="fake-channel.js"></script><script src="bridge.js"></script>
+<script type=module>
+import { GlassesDevice } from './js/devices/GlassesDevice.js';
+const out = []; const ok = (name, cond, extra) => out.push({ name, pass: !!cond, extra });
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+try {
+  ok('bridge installed', window.VelaNative && typeof VelaNative.getFrame === 'function');
+  const d = new GlassesDevice();
+  const states = []; d.onStateChange((s, e) => states.push(s + (e ? ':' + e.code : '')));
+  await sleep(200);
+  // 1. no glasses linked: phone fallback, ready + notice
+  await d.start();
+  ok('ready via phone fallback', d.state === 'ready' && d.source === 'phone', { notice: d.notice });
+  ok('notice explains fallback', /phone camera/.test(d.notice || ''));
+  const b = await d.getFrame();
+  ok('getFrame returns jpeg Blob', b instanceof Blob && b.type === 'image/jpeg' && b.size > 10000, { size: b.size });
+  ok('lastFrame metadata', d.lastFrame && d.lastFrame.source === 'phone' && d.lastFrame.captureMs === 640);
+  // 2. glasses connect later: source switches, state stays ready, listeners notified
+  const n = states.length;
+  __fake.glasses = 'ready'; __fake.code = null; __push(); await sleep(50);
+  ok('switch to glasses', d.source === 'glasses' && d.notice === null && d.state === 'ready' && states.length > n, { states });
+  ok('frame from glasses', (await d.getFrame()) && d.lastFrame.source === 'glasses');
+  // 3. one failed capture propagates code
+  __fake.failNext = true; let code = null; try { await d.getFrame(); } catch (e) { code = e.code; }
+  ok('capture error keeps code', code === 'glasses_timeout');
+  // 4. glasses drop and no phone permission -> error disconnected
+  __fake.glasses = 'disconnected'; __fake.code = 'disconnected'; __fake.phone = false; __push(); await sleep(50);
+  ok('disconnect -> error', d.state === 'error' && d.error.code === 'disconnected', d.error);
+  let threw = false; try { await d.getFrame(); } catch { threw = true; }
+  ok('getFrame throws when not ready', threw);
+  // 5. glasses back -> ready
+  __fake.glasses = 'ready'; __fake.code = null; __push(); await sleep(50);
+  ok('reconnect -> ready', d.state === 'ready' && d.source === 'glasses');
+  ok('audio() is MediaStream or null', d.audio() === null || d.audio() instanceof MediaStream);
+  ok('capabilities', d.capabilities.frameMaxPx === 1280 && d.capabilities.audioKind === 'mediastream');
+  await d.stop();
+  ok('stop -> idle', d.state === 'idle' && VelaNative.state() === 'idle');
+  ok('logs sent', window.__logs.some(l => l.type === 'glasses.source'), window.__logs.map(l => l.type));
+  // 6. no bridge at all
+  const saved = window.VelaNative; Object.defineProperty(window, 'VelaNative', { value: undefined, configurable: true });
+  const d2 = new GlassesDevice(); let e2 = null; try { await d2.start(); } catch (e) { e2 = e; }
+  ok('no bridge -> error nobridge', e2 && d2.state === 'error' && d2.error.code === 'nobridge');
+} catch (e) { out.push({ name: 'exception', pass: false, extra: String(e.stack || e) }); }
+window.__done = out;
+</script>

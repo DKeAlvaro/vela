@@ -1,0 +1,24 @@
+{
+  "voice_id": "pFZP5JQG7iQjIQuC4Bku",
+  "model": "eleven_flash_v2_5",
+  "lines": {
+    "Hello, I'm Vela. I'll keep an eye out for you.": "aefc3eeaaf9b0a3f.mp3",
+    "What should I call you?": "6db5ba5e66f69b1b.mp3",
+    "I'm here whenever you need me. Just say Vela.": "5d3d96b92af7252a.mp3",
+    "I'm already watching.": "0afb7f3ac1b96070.mp3",
+    "All right, I'll rest. Say: Vela, start, when you want me.": "f243d1111f309403.mp3",
+    "I'm resting. Say: Vela, start, when you want me.": "65fc67f7868e51f1.mp3",
+    "I haven't said anything yet.": "523ead8abde13757.mp3",
+    "Let's go through it again.": "d2e4630f453e5097.mp3",
+    "I can learn faces soon.": "4a02e47e947f55af.mp3",
+    "I can't tell yet.": "c69cb41337dafc97.mp3",
+    "I can't see anyone's face right now.": "9d93cad59378c52a.mp3",
+    "I don't know this person. Say: Vela, remember this person.": "894d2909aa27fb8d.mp3",
+    "I can't see right now.": "4c4e78df1d26e8cc.mp3",
+    "Please say yes or no.": "454e52d293db60ab.mp3",
+    "Sorry, was that a yes or a no?": "a50024f89a53a928.mp3",
+    "Let's leave that for now. Someone in your family can help later.": "f91c69aa59c7acd6.mp3",
+    "Take your time.": "37b9672fcdcdd08a.mp3",
+    "All right.": "441c8d04a23c835f.mp3"
+  }
+}

@@ -1,0 +1,8 @@
+node_modules/
+logs/
+cache/
+.env
+test/out/
+test/clips/
+*.y4m
+out/
