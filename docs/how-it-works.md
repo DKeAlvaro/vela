@@ -22,6 +22,6 @@ Say "Vela, ..." (a follow-up within 10 s needs no name).
 | what can you do? / repeat | help / last line again |
 | set up again | restarts onboarding |
 
-The screen shows what she is doing and what she heard. **For family** lists the people (edit, remove) and today's moments.
+The screen only mirrors what she is doing and what she heard. The one place with buttons is **For family**: the people she knows (edit, remove) and today's moments.
 
 [Privacy](privacy.md) · [Architecture](architecture.md)
