@@ -28,6 +28,9 @@ const LINES = [
   "If that's wrong, say no.", "Say no if that's wrong.", "Sorry, I didn't catch that.", "Sorry. Let's try again.",
   "I'm back.", 'Where were we?', 'Yes.', 'No.', 'Okay.', 'Done.',
 ];
+// Composed lines are generated in one take so the intonation is natural (pieces glued together sound robotic).
+for (const pre of ['Take your time.', "Sorry, I didn't catch that.", "Sorry. Let's try again."]) LINES.push(`${pre} Who is it?`);
+LINES.push("I'm back. Who is it?", "I'm back. What should I call you?");
 
 const todo = [...new Set(LINES)].filter((t) => !manifest.lines[t] || !fs.existsSync(path.join(dir, manifest.lines[t])));
 const chars = todo.reduce((n, t) => n + t.length, 0);
