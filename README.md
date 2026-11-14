@@ -1,5 +1,3 @@
-<img src="docs/img/header.jpg" alt="A woman in her eighties at her open front door, looking out" width="100%">
-
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/img/vela-dark.png">
@@ -7,7 +5,7 @@
   </picture>
 </p>
 
-<p align="center"><b>Growing old doesn’t mean losing independence.</b></p>
+<img src="docs/img/header.jpg" alt="Growing old doesn’t mean losing independence." width="100%">
 
 Vela remembers faces: tell her who someone is once, and next time she says it quietly in your ear through your Ray-Ban Meta glasses.
 
