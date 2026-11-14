@@ -1,10 +1,46 @@
 # Architecture
 
+```mermaid
+flowchart LR
+  subgraph G["Glasses (or just the phone)"]
+    cam["Camera"]
+    mic["Microphone"]
+    spk["Speaker"]
+  end
+
+  subgraph P["Phone: photos and faces never leave it"]
+    face{"A face<br/>she knows?"}
+    people[("People you taught her<br/>name, relation, face")]
+    line["#quot;That's Marta,<br/>your granddaughter.#quot;"]
+    quiet["Silence"]
+    learn["Learn a new person"]
+  end
+
+  subgraph C["Online: only sound and text"]
+    stt["Speech to text<br/><i>Groq Whisper</i>"]
+    llm["Pick out name and relation<br/><i>Groq gpt-oss-20b</i>"]
+    tts["Vela's voice<br/><i>ElevenLabs</i>"]
+  end
+
+  cam -->|a photo every few seconds| face
+  people -.->|compare| face
+  face -->|yes| line
+  face -->|no| quiet
+  line -->|text| tts
+  tts -->|audio| spk
+
+  mic -->|"#quot;Vela, this is Pedro, my neighbour#quot;"| stt
+  stt -->|text| llm
+  llm --> learn
+  cam -.->|photo of the person| learn
+  learn -->|after you say yes| people
 ```
-glasses / phone camera -> VelaDevice.getFrame() -> faces.js (Human, WebGL, on the phone)
-mic -> voice-activity segmenter -> /api/stt (Groq Whisper) -> /api/understand (Groq gpt-oss-20b)
-Vela's lines -> voice/el/*.mp3 (exact text) or /api/tts (ElevenLabs, cached) -> VelaDevice.say()
-```
+
+**Recognising** (top path): the camera takes a still, the phone looks for a face and compares it with the people you taught her. A match is spoken once per person every 10 minutes; a stranger gets silence and is not kept.
+
+**Teaching** (bottom path): you say who someone is, your words become text, a small model pulls out the name and relation, and the phone stores them next to the face.
+
+In code: faces are `faces.js` (Human: BlazeFace + FaceRes, WebGL); the mic goes through a voice-activity segmenter to `/api/stt` and `/api/understand`; Vela's lines play from `voice/el/*.mp3` on an exact text match, else `/api/tts` (cached). The Vela server only relays those three calls and holds the keys.
 
 | Folder | What |
 |---|---|
