@@ -32,11 +32,21 @@ export async function prefetch(lines) {
   log('tts.prefetched', { n: ready.size });
 }
 
-// Fixed tails Vela adds after a dynamic part; they are cached once and reused.
-const FIXED_TAILS = [' Right?', ' Is that right? If not, say no, and tell me again.', ' Is that right?', " If that's wrong, say no.", ' Say no if that\'s wrong.'];
-export function splitFixedTail(text) {
-  for (const t of FIXED_TAILS) if (text.endsWith(t) && text.length > t.length) return [text.slice(0, -t.length), t.trim()];
-  return [text];
+// A composed line ("Sorry, I didn't catch that. Who is it?", "Pedro, my son. Right?") is cut into banked
+// pieces (fixed phrases at the start/end) plus at most one dynamic middle, so only the new part is generated.
+export function splitBanked(text) {
+  const keys = Object.keys(manifest).sort((x, y) => y.length - x.length);
+  const head = [], tail = [];
+  let rest = text, moved = true;
+  while (moved && rest) {
+    moved = false;
+    const h = keys.find((k) => rest.startsWith(`${k} `));
+    if (h) { head.push(h); rest = rest.slice(h.length + 1); moved = true; continue; }
+    const t = keys.find((k) => rest.endsWith(` ${k}`) && rest.length > k.length + 1);
+    if (t) { tail.unshift(t); rest = rest.slice(0, -(t.length + 1)); moved = true; }
+  }
+  const parts = [...head, ...(rest ? [rest] : []), ...tail];
+  return parts.length ? parts : [text];
 }
 
 // Returns { startedAt } (performance.now() when the voice began).
@@ -57,9 +67,8 @@ export async function say(device, text, meta = {}) {
     // mean silence: wait longer for the real voice there.
     const hasBrowserVoice = 'speechSynthesis' in window && speechSynthesis.getVoices().length > 0;
     const limit = hasBrowserVoice ? 5000 : 12000;
-    // A read-back like "Álvaro. Is that right?": only the short first part is new; the fixed tail
-    // is cached. Generate them separately and play one after the other.
-    const parts = splitFixedTail(text);
+    // Banked pieces come from /voice/el; only the dynamic part (a name) is generated. Played one after the other.
+    const parts = splitBanked(text);
     try {
       const blobs = await Promise.all(parts.map(async (p) => {
         const pre = await manifestBlob(p);
