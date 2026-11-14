@@ -1,27 +1,19 @@
 # Privacy
 
-Faces are detected and matched on the phone. No photo, no face and no embedding is sent anywhere.
+No photo, face or embedding leaves the phone.
 
-## Stays on the phone
-- Camera frames (checked, then dropped; the shell stores nothing).
-- Face detection and matching (Human: BlazeFace and FaceRes, running in WebGL).
-- The people Vela knows: name, relation, face embeddings and a 96 px thumbnail, in the browser's local storage.
-- **Remove** in the app deletes a person and their face.
+**On the phone:** camera frames (checked, dropped), face matching, and the people Vela knows (name, relation, embeddings, 96 px thumbnail) in local storage. **Remove** deletes a person.
 
-## Leaves the phone
+**Leaves the phone:**
 | What | Where | Why |
 |---|---|---|
 | Short audio clips of your answers | Groq (Whisper) | speech to text |
 | The transcript | Groq (gpt-oss-20b) | name and relation |
-| The text Vela speaks | ElevenLabs | her voice (lines are cached) |
-| Event logs: states, names, match scores, spoken lines | the Vela server | debugging |
+| The text Vela speaks | ElevenLabs | her voice (cached) |
+| Event logs: states, names, match scores, lines | Vela server | debugging |
 
-Logs never contain images, audio or embeddings. Quiet takes are not sent at all.
+Logs never hold images, audio or embeddings. Quiet takes are not sent.
 
-## Rules Vela keeps
-- She learns a face only when you tell her who the person is and confirm.
-- Unknown faces: silence, nothing kept.
-- Every `/api/*` and `/log` call needs the app token.
-- The glasses' camera LED stays on while Vela watches. That is Meta's privacy light.
+**Rules:** a face is learned only when you say who it is and confirm. Unknown faces are never kept. Every `/api/*` and `/log` call needs the app token. The glasses' LED stays on while Vela watches.
 
-Next: [Architecture](architecture.md) · [Run it yourself](run.md)
+[Architecture](architecture.md) · [Run it](run.md)
