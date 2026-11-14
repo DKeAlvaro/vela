@@ -1,10 +1,9 @@
 html,body{margin:0;height:100%;background:#13110F;overflow:hidden}
-.stage{--r:1.7921;--tx:5.65;--ty:69;--tw:14.51;--th:8.06;--gx:21.36;--gy:69;--gw:12.51;--gh:8.06;--ox:0;
-  position:fixed;top:50%;left:calc((100vw - var(--w)) * var(--ox));--w:max(100vw,calc(100vh * var(--r)));
-  width:var(--w);aspect-ratio:var(--r);transform:translateY(-50%)}
+.stage{--r:1.7921;--gx:16.82;--gy:85.37;--gw:3.42;--gh:6.12;--ox:0;--w:max(100vw,calc(100vh * var(--r)));
+  position:fixed;top:50%;left:calc((100vw - var(--w)) * var(--ox));width:var(--w);aspect-ratio:var(--r);transform:translateY(-50%)}
 .stage img{display:block;width:100%;height:100%}
-.hot{position:absolute;border-radius:999px;-webkit-tap-highlight-color:transparent}
-.hot:focus-visible{outline:3px solid #F4EFE6;outline-offset:3px}
-.try{left:calc(var(--tx)*1%);top:calc(var(--ty)*1%);width:calc(var(--tw)*1%);height:calc(var(--th)*1%)}
-.gh{left:calc(var(--gx)*1%);top:calc(var(--gy)*1%);width:calc(var(--gw)*1%);height:calc(var(--gh)*1%)}
-@media (max-aspect-ratio:4/5){.stage{--r:.558;--ox:.4;--tx:9.8;--ty:69.2;--tw:35.47;--th:6.14;--gx:47.67;--gy:69.2;--gw:30.59;--gh:6.14}}
+.hot{position:absolute;border-radius:50%;left:calc(var(--gx)*1%);top:calc(var(--gy)*1%);width:calc(var(--gw)*1%);height:calc(var(--gh)*1%);-webkit-tap-highlight-color:transparent}
+.hot:focus-visible,.btn:focus-visible{outline:3px solid #F4EFE6;outline-offset:3px}
+.btn{position:fixed;left:50%;bottom:max(9vh,48px);transform:translateX(-50%);display:inline-flex;align-items:center;min-height:56px;padding:0 34px;border-radius:999px;background:#F0A23A;color:#13110F;font:700 19px/1 "Atkinson Hyperlegible Next",system-ui,sans-serif;text-decoration:none;white-space:nowrap}
+.btn:hover{background:#f5b55a}
+@media (max-aspect-ratio:4/5){.stage{--r:.558;--ox:.4;--gx:36.2;--gy:85.89;--gw:8.27;--gh:4.61}.btn{bottom:21vh}}
