@@ -5,7 +5,7 @@
   </picture>
 </p>
 
-<img src="docs/img/header.jpg" alt="Growing old doesn’t mean losing independence." width="100%">
+<img src="docs/img/tagline.jpg" alt="Growing old doesn’t mean losing independence." width="100%">
 
 Vela remembers faces: tell her who someone is once, and next time she says it quietly in your ear through your Ray-Ban Meta glasses.
 
