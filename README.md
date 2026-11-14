@@ -24,4 +24,10 @@ A stranger gets silence. Nothing is kept about them.
 | What does it need? | An Android phone and Ray-Ban Meta glasses. Without glasses, the phone camera works. |
 | Anything else besides faces? | No. One thing, done well. |
 
-More: [How it works](docs/how-it-works.md) · [FAQ](docs/faq.md) · [Privacy](docs/privacy.md) · [Glasses setup](docs/glasses.md) · [Run it yourself](docs/run.md) · [Architecture](docs/architecture.md) · [Website](https://meetvela.tech)
+- [How it works](docs/how-it-works.md)
+- [FAQ](docs/faq.md)
+- [Privacy](docs/privacy.md)
+- [Use it with Ray-Ban Meta glasses](docs/glasses.md)
+- [Run it yourself](docs/run.md)
+- [Architecture](docs/architecture.md)
+- [Website](https://meetvela.tech)
