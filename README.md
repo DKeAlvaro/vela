@@ -1,7 +1,11 @@
-# Vela
-Vela remembers faces: tell her who someone is once, and next time she says it quietly in your ear through your glasses.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/img/vela-dark.png">
+    <img src="docs/img/vela-light.png" alt="vela" width="220">
+  </picture>
+</p>
 
-![Vela listening, then recognising Pedro](docs/img/app.png)
+Vela remembers faces: tell her who someone is once, and next time she says it quietly in your ear through your glasses.
 
 - [How it works](docs/how-it-works.md)
 - [Privacy](docs/privacy.md)
