@@ -77,7 +77,7 @@ export async function say(device, text, meta = {}) {
         if (r.status !== 200) throw new Error(`tts ${r.status}`);
         return Promise.race([r.blob(), new Promise((_, rej) => setTimeout(() => rej(new Error('tts body timeout')), limit))]);
       }));
-      audio = blobs.length === 1 ? blobs[0] : new Blob(blobs, { type: 'audio/mpeg' });
+      audio = blobs.length === 1 ? blobs[0] : blobs; // several mp3s glued into one file stall some WebViews: play them one by one
     } catch (e) { log('tts.fallback', { message: e.message, browser_voice: hasBrowserVoice }); }
   }
   let startedAt = null;
@@ -85,13 +85,14 @@ export async function say(device, text, meta = {}) {
   pauseEars(); // never listen to herself (her lines can contain "Vela, start")
   try {
     try {
-      await device.say(audio, { chimeAt, onStart: (t) => { startedAt = startedAt ?? t; } });
+      const seq = Array.isArray(audio) ? audio : [audio];
+      for (let i = 0; i < seq.length; i++) await device.say(seq[i], { chimeAt: i ? performance.now() - 1000 : chimeAt, onStart: (t) => { startedAt = startedAt ?? t; } });
     } catch (e) {
       // Audio playback blocked or stalled (some WebViews): say it with the browser voice instead.
       log('voice.play_error', { message: String(e.message).slice(0, 120) });
-      if (audio instanceof Blob) { audio = text; await device.say(text, { chimeAt: performance.now() - 1000, onStart: (t) => { startedAt = startedAt ?? t; } }); }
+      if (audio instanceof Blob || Array.isArray(audio)) { audio = text; await device.say(text, { chimeAt: performance.now() - 1000, onStart: (t) => { startedAt = startedAt ?? t; } }); }
     }
   } finally { document.body.classList.remove('speaking'); resumeEars(); }
-  log('voice.done', { ...meta, tts: audio instanceof Blob ? ttsProvider : 'browser', fetch_ms: Math.round((startedAt ?? performance.now()) - t0) });
+  log('voice.done', { ...meta, tts: audio instanceof Blob || Array.isArray(audio) ? ttsProvider : 'browser', fetch_ms: Math.round((startedAt ?? performance.now()) - t0) });
   return { startedAt: startedAt ?? performance.now() };
 }

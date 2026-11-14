@@ -1,6 +1,6 @@
 // Service worker: caches the app shell so Vela opens without a network (and is installable).
 // API calls always go to the network; nothing personal is cached here.
-const V = 'vela-shell-v4-voicebank';
+const V = 'vela-shell-v5-voicebank';
 const SHELL = ['/', '/index.html', '/css/app.css', '/js/app.js', '/js/api.js', '/js/store.js', '/js/pipeline.js', '/js/watches.js',
   '/js/frames.js', '/js/voice.js', '/js/listen.js', '/js/faces.js', '/js/devices/VelaDevice.js', '/js/devices/PhoneDevice.js',
   '/fonts/fraunces-normal.woff2', '/fonts/atkinson-hyperlegible-next-normal.woff2', '/manifest.webmanifest', '/icons/icon-192.png'];
