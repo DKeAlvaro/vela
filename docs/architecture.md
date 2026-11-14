@@ -1,46 +1,41 @@
 # Architecture
 
 ```mermaid
-flowchart LR
-  subgraph G["Glasses (or just the phone)"]
-    cam["Camera"]
-    mic["Microphone"]
-    spk["Speaker"]
+sequenceDiagram
+  participant G as You and your glasses<br/>(camera, mic, speaker)
+  participant P as Phone, the Vela app<br/>(photos and faces stay here)
+  participant C as Online services<br/>(sound and text only)
+
+  rect rgba(128, 128, 128, 0.12)
+    Note over G,C: 1. Teach her once
+    G->>P: "Vela, this is Pedro, my neighbour" + what the camera sees
+    P->>C: your words, as audio
+    C-->>P: Pedro, "your neighbour"
+    P->>G: "Pedro, your neighbour. Is that right?"
+    G->>P: "Yes"
+    Note over P: Saves Pedro's face with his name
   end
 
-  subgraph P["Phone: photos and faces never leave it"]
-    face{"A face<br/>she knows?"}
-    people[("People you taught her<br/>name, relation, face")]
-    line["#quot;That's Marta,<br/>your granddaughter.#quot;"]
-    quiet["Silence"]
-    learn["Learn a new person"]
+  rect rgba(128, 128, 128, 0.12)
+    Note over G,C: 2. Next time, she reminds you
+    G->>P: a photo every few seconds
+    Note over P: Finds faces and compares them<br/>with the people you taught her
+    P->>C: the text "That's Pedro, your neighbour."
+    C-->>P: the same line, in Vela's voice
+    P->>G: says it softly in your ear
+    Note over P: Unknown face: silence, nothing is kept
   end
-
-  subgraph C["Online: only sound and text"]
-    stt["Speech to text<br/><i>Groq Whisper</i>"]
-    llm["Pick out name and relation<br/><i>Groq gpt-oss-20b</i>"]
-    tts["Vela's voice<br/><i>ElevenLabs</i>"]
-  end
-
-  cam -->|a photo every few seconds| face
-  people -.->|compare| face
-  face -->|yes| line
-  face -->|no| quiet
-  line -->|text| tts
-  tts -->|audio| spk
-
-  mic -->|"#quot;Vela, this is Pedro, my neighbour#quot;"| stt
-  stt -->|text| llm
-  llm --> learn
-  cam -.->|photo of the person| learn
-  learn -->|after you say yes| people
 ```
 
-**Recognising** (top path): the camera takes a still, the phone looks for a face and compares it with the people you taught her. A match is spoken once per person every 10 minutes; a stranger gets silence and is not kept.
+| In the diagram | In the code |
+|---|---|
+| Finds and compares faces | `faces.js`: Human (BlazeFace + FaceRes) on WebGL, in the phone's browser engine |
+| Your words, as audio | mic, voice-activity segmenter, `/api/stt` (Groq Whisper) |
+| Name and relation | `/api/understand` (Groq gpt-oss-20b) |
+| Vela's voice | `voice/el/*.mp3` on an exact text match, else `/api/tts` (ElevenLabs, cached) |
+| Camera, mic, speaker | `VelaDevice`: Ray-Ban Meta glasses through the Android shell, or the phone itself |
 
-**Teaching** (bottom path): you say who someone is, your words become text, a small model pulls out the name and relation, and the phone stores them next to the face.
-
-In code: faces are `faces.js` (Human: BlazeFace + FaceRes, WebGL); the mic goes through a voice-activity segmenter to `/api/stt` and `/api/understand`; Vela's lines play from `voice/el/*.mp3` on an exact text match, else `/api/tts` (cached). The Vela server only relays those three calls and holds the keys.
+The Vela server sits between the phone and the online services: it relays those three calls and holds the keys.
 
 | Folder | What |
 |---|---|
