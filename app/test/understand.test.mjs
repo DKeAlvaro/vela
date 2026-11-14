@@ -25,8 +25,8 @@ test('spoken time', () => { assert.equal(spokenTimeOf('09:00'), 'nine in the mor
 import { spelledOf } from '../public/js/voice/parse.js';
 test('repeat, spelled, corrections', () => {
   assert.equal(answerOf('Repeat, please.'), 'repeat'); assert.equal(answerOf('Sorry?'), 'repeat');
-  assert.equal(spelledOf("Well, it's Benz. It's spelled B-E-N-C-E."), 'Bence');
+  assert.equal(spelledOf("Well, it's Marter. It's spelled M-A-R-T-A."), 'Marta');
   assert.equal(spelledOf('T-T-T-T-T-T-T-T-T-T-T-T-T-T-Tro, my neighbour'), null);
-  assert.equal(correctionOf("Well, it's Bence."), 'Bence.'); assert.equal(correctionOf("It's Bence"), 'Bence');
+  assert.equal(correctionOf("Well, it's Marta."), 'Marta.'); assert.equal(correctionOf("It's Marta"), 'Marta');
 });
 test('more', () => { assert.equal(answerOf('Tell me more.'), 'more'); assert.equal(answerOf('More.'), 'more'); });
