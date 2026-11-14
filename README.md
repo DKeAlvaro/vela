@@ -1,3 +1,5 @@
+<img src="docs/img/header.jpg" alt="A woman in her eighties at her open front door, looking out" width="100%">
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/img/vela-dark.png">
