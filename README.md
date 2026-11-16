@@ -8,4 +8,4 @@ Vela remembers faces: tell her who someone is once, and next time she says it qu
 - [Use it with Ray-Ban Meta glasses](docs/glasses.md)
 - [Run it yourself](docs/run.md)
 - [Architecture](docs/architecture.md)
-- [Website](https://meetvela.tech/)
+- [Website](https://meetvela.tech)
